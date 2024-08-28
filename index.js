@@ -1,27 +1,7 @@
 import express from 'express';
-const accounts = [
-    {
-        firstName: 'Jonas',
-        lastName: 'Jonaitis',
-        birthday: '1900-01-01',
-        money: 100000,
-    },
-    {
-        firstName: 'Ona',
-        lastName: 'Onaite',
-        birthday: '1912-12-12',
-        money: 0,
-    },
-]
-function getAccountIndex(fullName) {
-    const name = fullName.toLowerCase().split('-');
-    if (name.length !== 2) {
-        return -1;
-    }
-    let index = -1;
-    accounts.map((a, i) => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1] ? index = i : '');
-    return index;
-}
+import { validateInput } from './validateInput.js';
+import { getAccountIndex } from './getAccountIndex.js';
+import { accounts } from './accounts.js';
 
 const app = express();
 const port = 5018;
@@ -100,7 +80,7 @@ app.post('/api/account', (req, res) => {
     if (index !== -1) {
         return res.json({
             status: "error",
-            message: "Account with that name already exis",
+            message: "Account with that name already exist",
         });
     }
     accounts.push({
@@ -109,8 +89,6 @@ app.post('/api/account', (req, res) => {
         birthday: data.birthday,
         money: 0,
     })
-    console.log(accounts);
-
     return res.json({ status: "Success", message: "New account added" });
 })
 
@@ -134,19 +112,22 @@ app.delete('/api/account/:name', (req, res) => {
     }
 })
 app.put('/api/account/:name', (req, res) => {
-    const index = getAccountIndex('?????');
-    if (index !== -1) {
-        return res.json({
-            message: "Account with that name already exis",
-            status: "error"
-        });
-    }
-    if (index !== -1) {
+    const index = getAccountIndex(req.params.name);
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    } else {
+        const validate = validateInput(req.body)
+        if (validate[0] === -1) {
+            res.json({ a: "a" })
+        };
+
+
+
+
         const old = accounts[index];
 
         return res.json({ oldData: old, newData: 'new' });
     }
-    return res.json({ status: "error", message: "No account with that name" });
 })
 
 app.get('/api/account/:name/name', (req, res) => {
