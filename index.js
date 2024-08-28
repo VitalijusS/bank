@@ -13,6 +13,15 @@ const accounts = [
         money: 0,
     },
 ]
+function getAccountIndex(fullName) {
+    const name = fullName.toLowerCase().split('-');
+    if (name.length !== 2) {
+        return -1;
+    }
+    let index = -1;
+    accounts.map((a, i) => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1] ? index = i : '');
+    return index;
+}
 
 const app = express();
 const port = 5018;
@@ -60,9 +69,12 @@ app.put('/api/account', (req, res) => {
     }
     if (new Date(bDay) > new Date()) {
         return res.send(`Client needs to be 18 or older`);
-
     }
-
+    const name = req.params.name.toLowerCase().split('-');
+    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
+    if (account[0]) {
+        return res.send(`${account[0].firstName} ${account[0].lastName} ${account[0].birthday}`)
+    }
     return res.send(`Success`);
 })
 
@@ -76,9 +88,7 @@ app.get('/api/account/:name', (req, res) => {
 })
 
 app.delete('/api/account/:name', (req, res) => {
-    const name = req.params.name.toLowerCase().split('-');
-    let index = -1;
-    accounts.map((a, i) => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1] ? index = i : '');
+    const index = getAccountIndex(req.params.name)
     if (index === -1) {
         return res.send(`No account with that name`);
     } else if (accounts[index].money === 0) {
