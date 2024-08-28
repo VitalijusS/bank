@@ -34,7 +34,7 @@ app.listen(port, () => {
 })
 
 app.get('/', (req, res) => {
-    return res.send(`<a href="/api">API</a>`)
+    return res.send(`API`)
 })
 
 app.get('/api', (req, res) => {
@@ -42,37 +42,64 @@ app.get('/api', (req, res) => {
     return res.send(`API`);
 })
 
-app.put('/api/account', (req, res) => {
+app.post('/api/account', (req, res) => {
     const data = req.body;
     if (typeof data.firstName !== 'string') {
-        return res.send(`Firstname needs to be a string`);
+        return res.json({
+            message: "Firstname needs to be a string",
+            status: "error"
+        });
     }
     if (typeof data.lastName !== 'string') {
-        return res.send(`Lastname needs to be a string`);
+        return res.json({
+            message: "Lastname needs to be a string",
+            status: "error"
+        });
     }
     if (typeof data.birthday !== 'string') {
-        return res.send(`Birthday needs to be a string`);
+        return res.json({
+            message: "Birthday needs to be a string",
+            status: "error"
+        });
     }
     if (data.firstName.trim().length <= 0) {
-        return res.send(`Firstname can't be an empty string`);
+        return res.json({
+            message: "Firstname can't be an empty string",
+            status: "error"
+        });
     }
     if (data.lastName.trim().length <= 0) {
-        return res.send(`Lastname can't be an empty string`);
+        return res.json({
+            message: "Lastname can't be an empty string",
+            status: "error"
+        });
     }
     if (data.birthday.trim().length <= 0) {
-        return res.send(`Birthday can't be an empty string`);
+        return res.json({
+            message: "Birthday can't be an empty string",
+            status: "error"
+        });
     }
     const bDay = data.birthday.split('-');
     bDay[0] = parseInt(bDay[0]) + 18 + '';
     if (isNaN(new Date(data.birthday))) {
-        return res.send(`Birthday format needs to be: "YYYY-MM-DD"`);
+        return res.json({
+            message: "Birthday format needs to be: 'YYYY-MM-DD'",
+            status: "error"
+        });
     }
     if (new Date(bDay) > new Date()) {
-        return res.send(`Client needs to be 18 or older`);
+        return res.json({
+            message: "Client needs to be 18 or older",
+            status: "error"
+        });
     }
     const index = getAccountIndex(data.firstName + '-' + data.lastName)
     if (index !== -1) {
-        return res.send(`Account with that name already exist`)
+        return res.json({
+            message: "Account with that name already exis",
+            status: "error"
+        });
     }
     accounts.push({
         firstName: data.firstName,
@@ -82,43 +109,55 @@ app.put('/api/account', (req, res) => {
     })
     console.log(accounts);
 
-    return res.send(`Success`);
+    return res.json({ status: "Success", message: "New account added" });
 })
 
 app.get('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name)
     if (index !== -1) {
-        return res.send(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`)
+        return res.json(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`)
     }
-    return res.send(`No account with that name`)
+    return res.json({ status: "error", message: "No account with that name" })
 })
 
 app.delete('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name)
     if (index === -1) {
-        return res.send(`No account with that name`);
+        return res.json({ status: "error", message: "No account with that name" });
     } else if (accounts[index].money === 0) {
         accounts.splice(index, 1);
-        return res.send(`Account deleted`);
+        return res.json({ status: "success", message: "Account deleted" });
     } else if (accounts[index].money > 0) {
-        return res.send(`Account balance needs to be 0`);
+        return res.json({ status: "error", message: "Account balance needs to be 0" })
     }
 })
 app.put('/api/account/:name', (req, res) => {
+    const index = getAccountIndex('?????');
+    if (index !== -1) {
+        return res.json({
+            message: "Account with that name already exis",
+            status: "error"
+        });
+    }
+    if (index !== -1) {
+        const old = accounts[index];
 
-})//TODO
+        return res.json({ oldData: old, newData: 'new' });
+    }
+    return res.json({ status: "error", message: "No account with that name" });
+})
 
 app.get('/api/account/:name/name', (req, res) => {
     const index = getAccountIndex(req.params.name)
     if (index !== -1) {
-        return res.send(`${accounts[index].firstName}`);
+        return res.json(`${accounts[index].firstName}`);
     }
-    return res.send(`No account with that name`);
+    return res.json({ status: "error", message: "No account with that name" });
 })
 
 app.get('*', (req, res) => {
     console.log('404');
-    return res.send(`404`);
+    return res.json({ status: 'error', message: "404 page not found" });
 })
 app.use((req, res, next) => {
     res.status(404).send("Sorry can't find that!");
