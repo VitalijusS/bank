@@ -2,6 +2,7 @@ import express from 'express';
 import { validateInput } from './validateInput.js';
 import { getAccountIndex } from './getAccountIndex.js';
 import { accounts } from './accounts.js';
+import { validateName } from './validateName.js';
 
 const app = express();
 const port = 5018;
@@ -138,7 +139,19 @@ app.get('/api/account/:name/name', (req, res) => {
     }
     return res.json({ status: "error", message: "No account with that name" });
 })
+app.put('/api/account/:name/name', (req, res) => {
+    const index = getAccountIndex(req.params.name)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    const validate = validateName(req.body)
+    if (!validate[0]) {
+        return res.json(validate[1]);
+    }
+    accounts[index].firstName = req.body.firstName;
+    return res.json({ status: "success", message: "First name updated" });
 
+})
 app.get('*', (req, res) => {
     console.log('404');
     return res.json({ status: 'error', message: "404 page not found" });
