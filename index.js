@@ -70,19 +70,25 @@ app.put('/api/account', (req, res) => {
     if (new Date(bDay) > new Date()) {
         return res.send(`Client needs to be 18 or older`);
     }
-    const name = req.params.name.toLowerCase().split('-');
-    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
-    if (account[0]) {
-        return res.send(`${account[0].firstName} ${account[0].lastName} ${account[0].birthday}`)
+    const index = getAccountIndex(data.firstName + '-' + data.lastName)
+    if (index !== -1) {
+        return res.send(`Account with that name already exist`)
     }
+    accounts.push({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        birthday: data.birthday,
+        money: 0,
+    })
+    console.log(accounts);
+
     return res.send(`Success`);
 })
 
 app.get('/api/account/:name', (req, res) => {
-    const name = req.params.name.toLowerCase().split('-');
-    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
-    if (account[0]) {
-        return res.send(`${account[0].firstName} ${account[0].lastName} ${account[0].birthday}`)
+    const index = getAccountIndex(req.params.name)
+    if (index !== -1) {
+        return res.send(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`)
     }
     return res.send(`No account with that name`)
 })
@@ -103,10 +109,9 @@ app.put('/api/account/:name', (req, res) => {
 })//TODO
 
 app.get('/api/account/:name/name', (req, res) => {
-    const name = req.params.name.toLowerCase().split('-');
-    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
-    if (account[0]) {
-        return res.send(`${account[0].firstName}`);
+    const index = getAccountIndex(req.params.name)
+    if (index !== -1) {
+        return res.send(`${accounts[index].firstName}`);
     }
     return res.send(`No account with that name`);
 })
