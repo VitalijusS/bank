@@ -43,6 +43,14 @@ app.get('/api/account/:name', (req, res) => {
     }
     return res.send(`No account with that name`)
 })
+app.get('/api/account/:name/name', (req, res) => {
+    const name = req.params.name.toLowerCase().split('-');
+    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
+    if (account[0]) {
+        return res.send(`${account[0].firstName}`)
+    }
+    return res.send(`No account with that name`)
+})
 
 app.get('*', (req, res) => {
     console.log('404');
