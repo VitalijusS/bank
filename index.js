@@ -29,10 +29,19 @@ app.get('/api', (req, res) => {
     return res.send(`<a href="/api/account">Accounts</a>`)
 })
 
-app.post('/api', (req, res) => {
+app.post('/api/account', (req, res) => {
 
 
     return res.send(`Success`)
+})
+
+app.get('/api/account/:name', (req, res) => {
+    const name = req.params.name.toLowerCase().split('-');
+    const account = accounts.filter(a => a.firstName.toLowerCase() === name[0] && a.lastName.toLowerCase() === name[1]);
+    if (account[0]) {
+        return res.send(`${account[0].firstName} ${account[0].lastName} ${account[0].birthday}`)
+    }
+    return res.send(`No account with that name`)
 })
 
 app.get('*', (req, res) => {
