@@ -15,7 +15,7 @@ app.listen(port, () => {
 
 app.get('/', (req, res) => {
     console.log(accounts);
-    return res.send(`API`)
+    return res.json(accounts.map(item => item))
 })
 
 app.post('/api/account', (req, res) => {
@@ -111,22 +111,23 @@ app.delete('/api/account/:name', (req, res) => {
         return res.json({ status: "error", message: "Account balance needs to be 0" })
     }
 })
+
 app.put('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name);
+    const index2 = getAccountIndex(req.body.firstName + '-' + req.body.lastName);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
+    } else if (index2 !== -1) {
+        return res.json({ status: "error", message: "Account with new name already exist" });
     } else {
         const validate = validateInput(req.body)
         if (validate[0] === -1) {
-            res.json({ a: "a" })
+            res.json(validate[1])
         };
-
-
-
-
+        const newData = { ...req.body, money: accounts[index].money }
         const old = accounts[index];
-
-        return res.json({ oldData: old, newData: 'new' });
+        accounts[index] = newData;
+        return res.json({ oldData: old, newData: newData });
     }
 })
 

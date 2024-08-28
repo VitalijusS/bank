@@ -1,7 +1,6 @@
 import { getAccountIndex } from "./getAccountIndex.js";
 
 export function validateInput(data) {
-    console.log(data)
     if (typeof data !== 'object') {
         return [-1, {
             status: "error",
@@ -64,7 +63,7 @@ export function validateInput(data) {
             message: "Client needs to be 18 or older",
         }];
     }
-    const index = getAccountIndex(data.firstName + '-' + data.lastName)
+    const index = getAccountIndex((data.firstName + '-' + data.lastName))
     if (index !== -1) {
         return [-1, {
             status: "error",
