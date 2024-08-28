@@ -34,71 +34,73 @@ app.listen(port, () => {
 })
 
 app.get('/', (req, res) => {
-    return res.send(`API`)
-})
-
-app.get('/api', (req, res) => {
     console.log(accounts);
-    return res.send(`API`);
+    return res.send(`API`)
 })
 
 app.post('/api/account', (req, res) => {
     const data = req.body;
+    if (Object.keys(data).length !== 3) {
+        return res.json({
+            status: "error",
+            message: "Object needs to contain 3 key/value pairs"
+        });
+    }
     if (typeof data.firstName !== 'string') {
         return res.json({
+            status: "error",
             message: "Firstname needs to be a string",
-            status: "error"
         });
     }
     if (typeof data.lastName !== 'string') {
         return res.json({
+            status: "error",
             message: "Lastname needs to be a string",
-            status: "error"
         });
     }
     if (typeof data.birthday !== 'string') {
         return res.json({
+            status: "error",
             message: "Birthday needs to be a string",
-            status: "error"
         });
     }
     if (data.firstName.trim().length <= 0) {
         return res.json({
+            status: "error",
             message: "Firstname can't be an empty string",
-            status: "error"
         });
     }
     if (data.lastName.trim().length <= 0) {
         return res.json({
+            status: "error",
             message: "Lastname can't be an empty string",
-            status: "error"
         });
     }
     if (data.birthday.trim().length <= 0) {
         return res.json({
+            status: "error",
             message: "Birthday can't be an empty string",
-            status: "error"
         });
     }
     const bDay = data.birthday.split('-');
     bDay[0] = parseInt(bDay[0]) + 18 + '';
     if (isNaN(new Date(data.birthday))) {
         return res.json({
+            status: "error",
             message: "Birthday format needs to be: 'YYYY-MM-DD'",
-            status: "error"
         });
     }
     if (new Date(bDay) > new Date()) {
         return res.json({
+            status: "error",
             message: "Client needs to be 18 or older",
-            status: "error"
         });
     }
     const index = getAccountIndex(data.firstName + '-' + data.lastName)
     if (index !== -1) {
         return res.json({
+            status: "error",
             message: "Account with that name already exis",
-            status: "error"
         });
     }
     accounts.push({
