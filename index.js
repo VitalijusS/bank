@@ -17,6 +17,9 @@ const accounts = [
 const app = express();
 const port = 5018;
 
+app.use(express.json({ type: 'application/json' }));
+app.use(express.urlencoded({ extended: true }))
+
 app.listen(port, () => {
     console.log(`server is on: http://localhost:${port}`)
 })
@@ -30,11 +33,38 @@ app.get('/api', (req, res) => {
     return res.send(`API`);
 })
 
-app.post('/api/account', (req, res) => {
+app.put('/api/account', (req, res) => {
+    const data = req.body;
+    if (typeof data.firstName !== 'string') {
+        return res.send(`Firstname needs to be a string`);
+    }
+    if (typeof data.lastName !== 'string') {
+        return res.send(`Lastname needs to be a string`);
+    }
+    if (typeof data.birthday !== 'string') {
+        return res.send(`Birthday needs to be a string`);
+    }
+    if (data.firstName.trim().length <= 0) {
+        return res.send(`Firstname can't be an empty string`);
+    }
+    if (data.lastName.trim().length <= 0) {
+        return res.send(`Lastname can't be an empty string`);
+    }
+    if (data.birthday.trim().length <= 0) {
+        return res.send(`Birthday can't be an empty string`);
+    }
+    const bDay = data.birthday.split('-');
+    bDay[0] = parseInt(bDay[0]) + 18 + '';
+    if (isNaN(new Date(data.birthday))) {
+        return res.send(`Birthday format needs to be: "YYYY-MM-DD"`);
+    }
+    if (new Date(bDay) > new Date()) {
+        return res.send(`Client needs to be 18 or older`);
 
+    }
 
-    return res.send(`Success`)
-})//TODO
+    return res.send(`Success`);
+})
 
 app.get('/api/account/:name', (req, res) => {
     const name = req.params.name.toLowerCase().split('-');
