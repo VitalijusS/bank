@@ -1,6 +1,6 @@
-# HANGMAN
+# Bank
 
-_website design project_
+_API project_
 <br>
 
 ## 🌟 About
