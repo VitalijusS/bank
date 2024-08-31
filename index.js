@@ -141,6 +141,7 @@ app.put('/api/account/:name/dob', (req, res) => {
     return res.json({ status: "success", message: "Birthday date updated" });
 
 })
+
 app.post('/api/withdrawal', (req, res) => {
     let validateFN = validateName(req.body.firstName)
     let validateLN = validateLastName(req.body.lastName)
@@ -160,6 +161,7 @@ app.post('/api/withdrawal', (req, res) => {
     if (accounts[index].money < req.body.money) {
         return res.json({ status: "error", message: "Not enough money in the bank account" });
     }
+
     accounts[index].money -= req.body.money;
     return res.json({ status: "Success", message: `${req.body.money / 100}€ is withdrawn` });
 })
@@ -183,6 +185,44 @@ app.post('/api/deposit', (req, res) => {
 
     accounts[index].money += req.body.money;
     return res.json({ status: "Success", message: `${req.body.money / 100}€ is deposited` });
+})
+app.post('/api/transfer', (req, res) => {
+
+    let validateSendingFN = validateName(req.body.firstNameSending)
+    let validateReceivingFN = validateName(req.body.firstNameReceiving)
+    let validateSendingLN = validateLastName(req.body.lastNameSending)
+    let validateReceivingLN = validateLastName(req.body.lastNameReceiving)
+    let validateM = validateMoney(req.body.money)
+    if (validateSendingFN) {
+        return res.json({ status: "error", message: validateSendingFN });
+    } else if (validateSendingLN) {
+        return res.json({ status: "error", message: validateSendingLN });
+    } else if (validateReceivingFN) {
+        return res.json({ status: "error", message: validateReceivingFN });
+    } else if (validateReceivingLN) {
+        return res.json({ status: "error", message: validateReceivingLN });
+    } else if (validateM) {
+        return res.json({ status: "error", message: validateM });
+    }
+    if (req.body.firstNameSending + '-' + req.body.lastNameSending === req.body.firstNameReceiving + '-' + req.body.lastNameReceiving) {
+        return res.json({ status: "error", message: "Can't transfer money to yourself" });
+    }
+
+    const index = getAccountIndex(req.body.firstNameSending + '-' + req.body.lastNameSending)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    const index2 = getAccountIndex(req.body.firstNameReceiving + '-' + req.body.lastNameReceiving)
+    if (index2 === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    if (accounts[index].money < req.body.money) {
+        return res.json({ status: "error", message: "Not enough money in the bank account" });
+    }
+
+    accounts[index].money -= req.body.money;
+    accounts[index2].money += req.body.money;
+    return res.json({ status: "Success", message: `${req.body.money / 100}€ is transfered` });
 })
 
 app.get('*', (req, res) => {
