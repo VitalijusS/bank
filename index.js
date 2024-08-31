@@ -152,6 +152,7 @@ app.post('/api/withdrawal', (req, res) => {
     } else if (validateM) {
         return res.json({ status: "error", message: validateM });
     }
+
     const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName)
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
@@ -161,6 +162,27 @@ app.post('/api/withdrawal', (req, res) => {
     }
     accounts[index].money -= req.body.money;
     return res.json({ status: "Success", message: `${req.body.money / 100}€ is withdrawn` });
+})
+
+app.post('/api/deposit', (req, res) => {
+    let validateFN = validateName(req.body.firstName)
+    let validateLN = validateLastName(req.body.lastName)
+    let validateM = validateMoney(req.body.money)
+    if (validateFN) {
+        return res.json({ status: "error", message: validateFN });
+    } else if (validateLN) {
+        return res.json({ status: "error", message: validateLN });
+    } else if (validateM) {
+        return res.json({ status: "error", message: validateM });
+    }
+
+    const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+
+    accounts[index].money += req.body.money;
+    return res.json({ status: "Success", message: `${req.body.money / 100}€ is deposited` });
 })
 
 app.get('*', (req, res) => {
