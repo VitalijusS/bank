@@ -1,8 +1,10 @@
 import express from 'express';
-import { validateInput } from './validateInput.js';
-import { getAccountIndex } from './getAccountIndex.js';
-import { accounts } from './accounts.js';
-import { validateName } from './validateName.js';
+import { validateInput } from './lib/validateInput.js';
+import { getAccountIndex } from './lib/getAccountIndex.js';
+import { accounts } from './data/accounts.js';
+import { validateName } from './lib/validateName.js';
+import { validateLastName } from './lib/validateName copy.js';
+import { validateDate } from './lib/validateDate.js';
 
 const app = express();
 const port = 5018;
@@ -21,68 +23,9 @@ app.get('/', (req, res) => {
 
 app.post('/api/account', (req, res) => {
     const data = req.body;
-    if (Object.keys(data).length !== 3) {
-        return res.json({
-            status: "error",
-            message: "Object needs to contain 3 key/value pairs"
-        });
-    }
-    if (typeof data.firstName !== 'string') {
-        return res.json({
-            status: "error",
-            message: "Firstname needs to be a string",
-        });
-    }
-    if (typeof data.lastName !== 'string') {
-        return res.json({
-            status: "error",
-            message: "Lastname needs to be a string",
-        });
-    }
-    if (typeof data.birthday !== 'string') {
-        return res.json({
-            status: "error",
-            message: "Birthday needs to be a string",
-        });
-    }
-    if (data.firstName.trim().length <= 0) {
-        return res.json({
-            status: "error",
-            message: "Firstname can't be an empty string",
-        });
-    }
-    if (data.lastName.trim().length <= 0) {
-        return res.json({
-            status: "error",
-            message: "Lastname can't be an empty string",
-        });
-    }
-    if (data.birthday.trim().length <= 0) {
-        return res.json({
-            status: "error",
-            message: "Birthday can't be an empty string",
-        });
-    }
-    const bDay = data.birthday.split('-');
-    bDay[0] = parseInt(bDay[0]) + 18 + '';
-    if (isNaN(new Date(data.birthday))) {
-        return res.json({
-            status: "error",
-            message: "Birthday format needs to be: 'YYYY-MM-DD'",
-        });
-    }
-    if (new Date(bDay) > new Date()) {
-        return res.json({
-            status: "error",
-            message: "Client needs to be 18 or older",
-        });
-    }
-    const index = getAccountIndex(data.firstName + '-' + data.lastName)
-    if (index !== -1) {
-        return res.json({
-            status: "error",
-            message: "Account with that name already exist",
-        });
+    const validate = validateInput(data)
+    if (validate) {
+        return res.json({ status: "Error", message: validate });
     }
     accounts.push({
         firstName: data.firstName,
@@ -90,7 +33,7 @@ app.post('/api/account', (req, res) => {
         birthday: data.birthday,
         money: 0,
     })
-    return res.json({ status: "Success", message: "New account added" });
+    return res.json({ status: "Success", message: "New account created" });
 })
 
 app.get('/api/account/:name', (req, res) => {
@@ -139,19 +82,66 @@ app.get('/api/account/:name/name', (req, res) => {
     }
     return res.json({ status: "error", message: "No account with that name" });
 })
+
 app.put('/api/account/:name/name', (req, res) => {
     const index = getAccountIndex(req.params.name)
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
-    const validate = validateName(req.body)
-    if (!validate[0]) {
-        return res.json(validate[1]);
+    const validate = validateName(req.body.firstName)
+    if (validate) {
+        return res.json({ status: "error", message: validate });
     }
     accounts[index].firstName = req.body.firstName;
     return res.json({ status: "success", message: "First name updated" });
 
 })
+
+app.get('/api/account/:name/surname', (req, res) => {
+    const index = getAccountIndex(req.params.name)
+    if (index !== -1) {
+        return res.json(`${accounts[index].lastName}`);
+    }
+    return res.json({ status: "error", message: "No account with that name" });
+})
+
+app.put('/api/account/:name/surname', (req, res) => {
+    const index = getAccountIndex(req.params.name)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    const validate = validateLastName(req.body.lastName)
+    if (validate) {
+        return res.json({ status: "error", message: validate });
+    }
+    accounts[index].lastName = req.body.lastName;
+    return res.json({ status: "success", message: "Last name updated" });
+
+})
+
+app.get('/api/account/:name/dob', (req, res) => {
+    const index = getAccountIndex(req.params.name)
+    if (index !== -1) {
+        return res.json(`${accounts[index].birthday}`);
+    }
+    return res.json({ status: "error", message: "No account with that name" });
+})
+
+app.put('/api/account/:name/dob', (req, res) => {
+    const index = getAccountIndex(req.params.name)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    const validate = validateDate(req.body.birthday)
+    if (validate) {
+        return res.json({ status: "error", message: validate });
+    }
+    accounts[index].birthday = req.body.birthday;
+    return res.json({ status: "success", message: "Birthday date updated" });
+
+})
+
+
 app.get('*', (req, res) => {
     console.log('404');
     return res.json({ status: 'error', message: "404 page not found" });
