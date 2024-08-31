@@ -5,6 +5,7 @@ import { accounts } from './data/accounts.js';
 import { validateName } from './lib/validateName.js';
 import { validateLastName } from './lib/validateName copy.js';
 import { validateDate } from './lib/validateDate.js';
+import { validateMoney } from './lib/validateMoney.js';
 
 const app = express();
 const port = 5018;
@@ -140,7 +141,27 @@ app.put('/api/account/:name/dob', (req, res) => {
     return res.json({ status: "success", message: "Birthday date updated" });
 
 })
-
+app.post('/api/withdrawal', (req, res) => {
+    let validateFN = validateName(req.body.firstName)
+    let validateLN = validateLastName(req.body.lastName)
+    let validateM = validateMoney(req.body.money)
+    if (validateFN) {
+        return res.json({ status: "error", message: validateFN });
+    } else if (validateLN) {
+        return res.json({ status: "error", message: validateLN });
+    } else if (validateM) {
+        return res.json({ status: "error", message: validateM });
+    }
+    const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName)
+    if (index === -1) {
+        return res.json({ status: "error", message: "No account with that name" });
+    }
+    if (accounts[index].money < req.body.money) {
+        return res.json({ status: "error", message: "Not enough money in the bank account" });
+    }
+    accounts[index].money -= req.body.money;
+    return res.json({ status: "Success", message: `${req.body.money / 100}€ is withdrawn` });
+})
 
 app.get('*', (req, res) => {
     console.log('404');
