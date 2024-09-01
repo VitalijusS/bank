@@ -67,9 +67,9 @@ Would like to run this project locally? Open terminal and follow these steps:
 - **Data example:** 
 ```JSON
 {   
- "firstName":"Tomas",
- "lastName":"Tomaitis",
- "birthday":"1999-12-24"
+	"firstName":"Tomas",
+	"lastName":"Tomaitis",
+	"birthday":"1999-12-24"
 }
 ```
     
@@ -116,9 +116,9 @@ before 1900th year.
 
 ```JSON
 {
-"firstName":"jonas",
-"lastName":"jonaitis",
-"birthday":"1999-01-01"
+	"firstName":"jonas",
+	"lastName":"jonaitis",
+	"birthday":"1999-01-01"
 }
 ```
 
@@ -152,7 +152,7 @@ to 20, only english aplhabet.
 
 ```JSON
 {
-    "firstName":"Petras"
+	"firstName":"Petras"
 }
 ```
     
@@ -210,7 +210,7 @@ to 20, only english aplhabet.
 - **Data example:** 
 ```JSON
 {
-    "birthday":"1999-04-31"
+	"birthday":"1999-04-31"
 }
 ```
 

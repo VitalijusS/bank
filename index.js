@@ -6,6 +6,7 @@ import { validateName } from './lib/validateName.js';
 import { validateLastName } from './lib/validateLastName.js';
 import { validateDate } from './lib/validateDate.js';
 import { validateMoney } from './lib/validateMoney.js';
+import { formatMoney } from './lib/formatMoney.js';
 
 const app = express();
 const port = 5018;
@@ -19,12 +20,12 @@ app.listen(port, () => {
 
 app.get('/', (req, res) => {
     console.log(accounts);
-    return res.json(accounts.map(item => item))
+    return res.json(accounts.map(item => item));
 })
 
 app.post('/api/account', (req, res) => {
     const data = req.body;
-    const validate = validateInput(data)
+    const validate = validateInput(data);
     if (validate) {
         return res.json({ status: "Error", message: validate });
     }
@@ -34,19 +35,19 @@ app.post('/api/account', (req, res) => {
         birthday: data.birthday,
         money: 0,
     })
-    return res.json({ status: "Success", message: "New account created" });
+    return res.json({ status: "Success", message: `${data.firstName} ${data.lastName} account created` });
 })
 
 app.get('/api/account/:name', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index !== -1) {
-        return res.json(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`)
+        return res.json(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`);
     }
-    return res.json({ status: "error", message: "No account with that name" })
+    return res.json({ status: "error", message: "No account with that name" });
 })
 
 app.delete('/api/account/:name', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     } else if (accounts[index].money === 0) {
@@ -67,7 +68,7 @@ app.put('/api/account/:name', (req, res) => {
     } else {
         const validate = validateInput(req.body)
         if (validate[0] === -1) {
-            res.json(validate[1])
+            res.json(validate[1]);
         };
         const newData = { ...req.body, money: accounts[index].money }
         const old = accounts[index];
@@ -77,7 +78,7 @@ app.put('/api/account/:name', (req, res) => {
 })
 
 app.get('/api/account/:name/name', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index !== -1) {
         return res.json(`${accounts[index].firstName}`);
     }
@@ -85,11 +86,11 @@ app.get('/api/account/:name/name', (req, res) => {
 })
 
 app.put('/api/account/:name/name', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
-    const validate = validateName(req.body.firstName)
+    const validate = validateName(req.body.firstName);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
@@ -99,7 +100,7 @@ app.put('/api/account/:name/name', (req, res) => {
 })
 
 app.get('/api/account/:name/surname', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index !== -1) {
         return res.json(`${accounts[index].lastName}`);
     }
@@ -111,7 +112,7 @@ app.put('/api/account/:name/surname', (req, res) => {
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
-    const validate = validateLastName(req.body.lastName)
+    const validate = validateLastName(req.body.lastName);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
@@ -121,7 +122,7 @@ app.put('/api/account/:name/surname', (req, res) => {
 })
 
 app.get('/api/account/:name/dob', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index !== -1) {
         return res.json(`${accounts[index].birthday}`);
     }
@@ -129,11 +130,11 @@ app.get('/api/account/:name/dob', (req, res) => {
 })
 
 app.put('/api/account/:name/dob', (req, res) => {
-    const index = getAccountIndex(req.params.name)
+    const index = getAccountIndex(req.params.name);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
-    const validate = validateDate(req.body.birthday)
+    const validate = validateDate(req.body.birthday);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
@@ -143,9 +144,9 @@ app.put('/api/account/:name/dob', (req, res) => {
 })
 
 app.post('/api/withdrawal', (req, res) => {
-    let validateFN = validateName(req.body.firstName)
-    let validateLN = validateLastName(req.body.lastName)
-    let validateM = validateMoney(req.body.money)
+    let validateFN = validateName(req.body.firstName);
+    let validateLN = validateLastName(req.body.lastName);
+    let validateM = validateMoney(req.body.money);
     if (validateFN) {
         return res.json({ status: "error", message: validateFN });
     } else if (validateLN) {
@@ -163,13 +164,13 @@ app.post('/api/withdrawal', (req, res) => {
     }
 
     accounts[index].money -= req.body.money;
-    return res.json({ status: "Success", message: `${req.body.money / 100}€ is withdrawn` });
+    return res.json({ status: "Success", message: `${formatMoney(req.body.money)} is withdrawn from ${accounts[index].firstName} ${accounts[index].lastName} account` });
 })
 
 app.post('/api/deposit', (req, res) => {
-    let validateFN = validateName(req.body.firstName)
-    let validateLN = validateLastName(req.body.lastName)
-    let validateM = validateMoney(req.body.money)
+    let validateFN = validateName(req.body.firstName);
+    let validateLN = validateLastName(req.body.lastName);
+    let validateM = validateMoney(req.body.money);
     if (validateFN) {
         return res.json({ status: "error", message: validateFN });
     } else if (validateLN) {
@@ -178,21 +179,20 @@ app.post('/api/deposit', (req, res) => {
         return res.json({ status: "error", message: validateM });
     }
 
-    const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName)
+    const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
 
     accounts[index].money += req.body.money;
-    return res.json({ status: "Success", message: `${req.body.money / 100}€ is deposited` });
+    return res.json({ status: "Success", message: `${formatMoney(req.body.money)} is deposited to ${accounts[index].firstName} ${accounts[index].lastName} account` });
 })
 app.post('/api/transfer', (req, res) => {
-
-    let validateSendingFN = validateName(req.body.firstNameSending)
-    let validateReceivingFN = validateName(req.body.firstNameReceiving)
-    let validateSendingLN = validateLastName(req.body.lastNameSending)
-    let validateReceivingLN = validateLastName(req.body.lastNameReceiving)
-    let validateM = validateMoney(req.body.money)
+    let validateSendingFN = validateName(req.body.firstNameSending);
+    let validateReceivingFN = validateName(req.body.firstNameReceiving);
+    let validateSendingLN = validateLastName(req.body.lastNameSending);
+    let validateReceivingLN = validateLastName(req.body.lastNameReceiving);
+    let validateM = validateMoney(req.body.money);
     if (validateSendingFN) {
         return res.json({ status: "error", message: validateSendingFN });
     } else if (validateSendingLN) {
@@ -208,11 +208,11 @@ app.post('/api/transfer', (req, res) => {
         return res.json({ status: "error", message: "Can't transfer money to yourself" });
     }
 
-    const index = getAccountIndex(req.body.firstNameSending + '-' + req.body.lastNameSending)
+    const index = getAccountIndex(req.body.firstNameSending + '-' + req.body.lastNameSending);
     if (index === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
-    const index2 = getAccountIndex(req.body.firstNameReceiving + '-' + req.body.lastNameReceiving)
+    const index2 = getAccountIndex(req.body.firstNameReceiving + '-' + req.body.lastNameReceiving);
     if (index2 === -1) {
         return res.json({ status: "error", message: "No account with that name" });
     }
@@ -222,7 +222,7 @@ app.post('/api/transfer', (req, res) => {
 
     accounts[index].money -= req.body.money;
     accounts[index2].money += req.body.money;
-    return res.json({ status: "Success", message: `${req.body.money / 100}€ is transfered` });
+    return res.json({ status: "Success", message: `${formatMoney(req.body.money)} is transfered from ${accounts[index].firstName} ${accounts[index].lastName} account to ${accounts[index2].firstName} ${accounts[index2].lastName} account` });
 })
 
 app.get('*', (req, res) => {
