@@ -52,204 +52,227 @@ Would like to run this project locally? Open terminal and follow these steps:
 
 ## 📝Instructions 
 
-### /api/account
-    **Registers new account**
+### ***/api/account***
+   
+- **Registers new account**
 
-    **HTTP request method:** POST
+- **HTTP request method:** POST
 
-    **Link example:** http://localhost:5018/api/account
+- **Link example:** http://localhost:5018/api/account
 
-    **Data to send:** First name, last name, birthday 
+- **Data to send:** First name, last name, birthday 
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, first and last name: first letter must be capita, length more than 2 letters and up to 20, only english aplhabet. Date: format is YYYY-MM-DD (1999-01-30) person must be 18 or older and can't put dates before 1900th year.
+- **Data rules/restrictions:** JSON format, follow the data struction  example, first and last name: first letter must be capita, th more than 2 letters and up to 20, only english aplhabet. : format is YYYY-MM-DD (1999-01-30) person must be 18 or older can't put dates before 1900th year.
 
-    **Data example:** 
-    ```JSON
-        {   
-	        "firstName":"Tomas",
-	        "lastName":"Tomaitis",
-	        "birthday":"1999-12-24"
-        }
-    ```
+- **Data example:** 
+```JSON
+{   
+ "firstName":"Tomas",
+ "lastName":"Tomaitis",
+ "birthday":"1999-12-24"
+}
+```
     
 
-### /api/account/{accountFirstName-accountLastName}
-    **Returns full name and date of birth**
+### ***/api/account/{accountFirstName-accountLastName}***
 
-    **HTTP request method:** GET
+- **Returns full name and date of birth**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
+- **HTTP request method:** GET
 
-    **Data to send:** None
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
 
-### /api/account/{accountFirstName-accountLastName}
-    **Deletes account**
+- **Data to send:** None
 
-    **HTTP request method:** DELETE
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
+### ***/api/account/{accountFirstName-accountLastName}***
 
-    **Data to send:** None
+- **Deletes account**
 
-### /api/account/{accountFirstName-accountLastName}
-    **Changes account information**
+- **HTTP request method:** DELETE
 
-    **HTTP request method:** PUT
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
+- **Data to send:** None
 
-    **Data to send:** First name, last name, birthday 
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, first and last name: first letter must be capita, length more than 2 letters and up to 20, only english aplhabet. Date: format is YYYY-MM-DD (1999-01-30) person must be 18 or older and can't put dates before 1900th year.
+### ***/api/account/{accountFirstName-accountLastName}***
 
-    **Data example:** 
-    ```JSON
-        {
-	        "firstName":"jonas",
-	        "lastName":"jonaitis",
-	        "birthday":"1999-01-01"
-        }
-    ```
+- **Changes account information**
 
-### /api/account/{accountFirstName-accountLastName}/name
-    **Returns first name of the account**
+- **HTTP request method:** PUT
 
-    **HTTP request method:** GET
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/name
+- **Data to send:** First name, last name, birthday 
 
-    **Data to send:** None
+- **Data rules/restrictions:** JSON format, follow the data struction rom
+ example, first and last name: first letter must be capita, ength more 
+than 2 letters and up to 20, only english aplhabet. ate: format is 
+YYYY-MM-DD (1999-01-30) person must be 18 or older nd can't put dates 
+before 1900th year.
+
+- **Data example:** 
+
+```JSON
+{
+"firstName":"jonas",
+"lastName":"jonaitis",
+"birthday":"1999-01-01"
+}
+```
+
+### ***/api/account/{accountFirstName-accountLastName}/name***
+
+- **Returns first name of the account**
+
+- **HTTP request method:** GET
+
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitisname
+
+- **Data to send:** None
+
     
  
-### /api/account/{accountFirstName-accountLastName}/name
-    **Updates first name of the account**
+### ***/api/account/{accountFirstName-accountLastName}/name***
 
-    **HTTP request method:** PUT
+- **Updates first name of the account**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/name
+- **HTTP request method:** PUT
 
-    **Data to send:** First name
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitisname
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, first letter must be capita, length more than 2 letters and up to 20, only english aplhabet.
+- **Data to send:** First name
 
-    **Data example:** 
-    ```
-        {
-	        "firstName":"Petras"
-        }
-    ```
+- **Data rules/restrictions:** JSON format, follow the data structionfrom
+ example, first letter must be capita, length more than 2letters and up 
+to 20, only english aplhabet.
+
+- **Data example:** 
+
+```JSON
+{
+    "firstName":"Petras"
+}
+```
     
-### /api/account/{accountFirstName-accountLastName}/surname
-    **Returns last name of the account**
+### ***/api/account/{accountFirstName-accountLastName}/surname***
 
-    **HTTP request method:** GET
+- **Returns last name of the account**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/surname
+- **HTTP request method:** GET
 
-    **Data to send:** None
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitissurnam
+
+- **Data to send:** None
  
-### /api/account/{accountFirstName-accountLastName}/surname
-    **Updates last name of the account**
+### ***/api/account/{accountFirstName-accountLastName}/surname***
 
-    **HTTP request method:** PUT
+- **Updates last name of the account**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/surname
+- **HTTP request method:** PUT
 
-    **Data to send:** Last name
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitissurname
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, first letter must be capita, length more than 2 letters and up to 20, only english aplhabet.
+- **Data to send:** Last name
 
-    **Data example:** 
+- **Data rules/restrictions:** JSON format, follow the data structionfrom example, first letter must be capita, length more than 2letters and up to 20, only english aplhabet.
+
+- **Data example:** 
         
-### /api/account/{accountFirstName-accountLastName}/dob
-    **Returns date of birth**
+### ***/api/account/{accountFirstName-accountLastName}/dob***
 
-    **HTTP request method:** GET
+- **Returns date of birth**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/dob
+- **HTTP request method:** GET
 
-    **Data to send:** None
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/dob
+
+- **Data to send:** None
  
-### /api/account/{accountFirstName-accountLastName}/dob
-    **Updates date of birth**
+### ***/api/account/{accountFirstName-accountLastName}/dob***
 
-    **HTTP request method:** PUT
+- **Updates date of birth**
 
-    **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/dob
+- **HTTP request method:** PUT
 
-    **Data to send:** Date of birth
+- **Link example:** http://localhost:5018/api/account/Jonas-Jonaitis/dob
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, format is YYYY-MM-DD (1999-01-30) person must be 18 or older and can't put dates before 1900th year.
+- **Data to send:** Date of birth
 
-    **Data example:** 
-    ```
-        {
-	        "birthday":"1999-04-31"
-        }
-    ```
+- **Data rules/restrictions:** JSON format, follow the data struction from example, format is YYYY-MM-DD (1999-01-30) person must be 18 or older and can't put dates before 1900th year.
 
-### /api/withdrawal
-    **Withdraws the money form account**
+- **Data example:** 
+```JSON
+{
+    "birthday":"1999-04-31"
+}
+```
 
-    **HTTP request method:** POST
+### ***/api/withdrawal***
 
-    **Link example:** http://localhost:5018/api/withdrawal
+- **Withdraws the money form account**
 
-    **Data to send:** First name, last name, ammount of money to withdraw in cents
+- **HTTP request method:** POST
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, already existing account first and last name, amount of money in cents, can't withdraw more money than account has.
+- **Link example:** http://localhost:5018/api/withdrawal
 
-    **Data example:** 
-    ```
-    {
-	    "firstName":"Jonas",
-	    "lastName":"Jonaitis",
-	    "money":10000
-    }
-    ```
+- **Data to send:** First name, last name, ammount of money to withdraw in cents
 
-### /api/deposit
-    **Deposits money to the account**
+- **Data rules/restrictions:** JSON format, follow the data struction from example, already existing account first and last name, amount of money in cents, can't withdraw more money than account has.
 
-    **HTTP request method:** POST
+- **Data example:** 
+```JSON
+{
+	"firstName":"Jonas",
+	"lastName":"Jonaitis",
+	"money":10000
+}
+```
 
-    **Link example:** http://localhost:5018/api/deposit
+### ***/api/deposit***
 
-    **Data to send:** First name, last name, ammount of money to deposit in cents
+- **Deposits money to the account**
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, already existing account first and last name, amount of money in cents.
+- **HTTP request method:** POST
 
-    **Data example:** 
-    ```
-    {
-	    "firstName":"Jonas",
-	    "lastName":"Jonaitis",
-	    "money":10000
-    }
-    ```
+- **Link example:** http://localhost:5018/api/deposit
 
-### /api/transfer
-    **Transfers money between accounts**
+- **Data to send:** First name, last name, ammount of money to deposit in cents
 
-    **HTTP request method:** POST
+- **Data rules/restrictions:** JSON format, follow the data struction from example, already existing account first and last name, amount of money in cents.
 
-    **Link example:** http://localhost:5018/api/transfer
+- **Data example:** 
+```JSON
+{
+	"firstName":"Jonas",
+	"lastName":"Jonaitis",
+	"money":10000
+}
+```
 
-    **Data to send:** First and last name of sender, first and last name of receiver, ammount of money in cents
+### ***/api/transfer***
 
-    **Data rules/restrictions:** JSON format, follow the data struction from example, already existing accounts first and last names, amount of money in cents.
+- **Transfers money between accounts**
 
+- **HTTP request method:** POST
 
-    **Data example:** 
-    ```
-        {
-	        "firstNameSending":"Jonas",
-	        "lastNameSending":"Jonaitis",
-	        "firstNameReceiving":"Ona",
-	        "lastNameReceiving":"Onaite",
-	        "money":1000
-        }
-    ```
+- **Link example:** http://localhost:5018/api/transfer
+
+- **Data to send:** First and last name of sender, first and last name of receiver, ammount of money in cents
+
+- **Data rules/restrictions:** JSON format, follow the data struction from example, already existing accounts first and last names, amount of money in cents.
+
+- **Data example:** 
+```JSON
+{
+	"firstNameSending":"Jonas",
+	"lastNameSending":"Jonaitis",
+	"firstNameReceiving":"Ona",
+	"lastNameReceiving":"Onaite",
+	"money":1000
+}
+```
 
 
 Data can be sent using "Insomnia" app in the body section using JSON format.
