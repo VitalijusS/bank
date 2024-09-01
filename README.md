@@ -179,6 +179,11 @@ to 20, only english aplhabet.
 - **Data rules/restrictions:** JSON format, follow the data structionfrom example, first letter must be capita, length more than 2letters and up to 20, only english aplhabet.
 
 - **Data example:** 
+```JSON
+{
+	"lastName":"Petraitis"
+}
+```
         
 ### ***/api/account/{accountFirstName-accountLastName}/dob***
 
