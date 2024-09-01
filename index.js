@@ -3,7 +3,7 @@ import { validateInput } from './lib/validateInput.js';
 import { getAccountIndex } from './lib/getAccountIndex.js';
 import { accounts } from './data/accounts.js';
 import { validateName } from './lib/validateName.js';
-import { validateLastName } from './lib/validateName copy.js';
+import { validateLastName } from './lib/validateLastName.js';
 import { validateDate } from './lib/validateDate.js';
 import { validateMoney } from './lib/validateMoney.js';
 
