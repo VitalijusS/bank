@@ -95,6 +95,8 @@ Would like to run this project locally? Open terminal and follow these steps:
 
 - **Data to send:** None
 
+- Account balance needs to be 0
+
 
 ### ***/api/account/{accountFirstName-accountLastName}***
 

@@ -41,15 +41,15 @@ app.post('/api/account', (req, res) => {
 app.get('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index !== -1) {
-        return res.json(`${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}`);
+        return res.json({ status: "Success", message: `${accounts[index].firstName} ${accounts[index].lastName} ${accounts[index].birthday}` });
     }
-    return res.json({ status: "error", message: "No account with that name" });
+    return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
 })
 
 app.delete('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
     } else if (accounts[index].money === 0) {
         accounts.splice(index, 1);
         return res.json({ status: "success", message: "Account deleted" });
@@ -62,7 +62,7 @@ app.put('/api/account/:name', (req, res) => {
     const index = getAccountIndex(req.params.name);
     const index2 = getAccountIndex(req.body.firstName + '-' + req.body.lastName);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
     } else if (index2 !== -1) {
         return res.json({ status: "error", message: "Account with new name already exist" });
     } else {
@@ -73,73 +73,73 @@ app.put('/api/account/:name', (req, res) => {
         const newData = { ...req.body, money: accounts[index].money }
         const old = accounts[index];
         accounts[index] = newData;
-        return res.json({ oldData: old, newData: newData });
+        return res.json({ status: "success", oldData: old, newData: newData });
     }
 })
 
 app.get('/api/account/:name/name', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index !== -1) {
-        return res.json(`${accounts[index].firstName}`);
+        return res.json({ status: "success", message: `${accounts[index].firstName}` });
     }
-    return res.json({ status: "error", message: "No account with that name" });
+    return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
 })
 
 app.put('/api/account/:name/name', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
     }
     const validate = validateName(req.body.firstName);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
     accounts[index].firstName = req.body.firstName;
-    return res.json({ status: "success", message: "First name updated" });
+    return res.json({ status: "success", message: `First name updated to: ${req.body.firstName}` });
 
 })
 
 app.get('/api/account/:name/surname', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index !== -1) {
-        return res.json(`${accounts[index].lastName}`);
+        return res.json({ status: "success", message: `${accounts[index].lastName}` });
     }
-    return res.json({ status: "error", message: "No account with that name" });
+    return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
 })
 
 app.put('/api/account/:name/surname', (req, res) => {
     const index = getAccountIndex(req.params.name)
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
     }
     const validate = validateLastName(req.body.lastName);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
     accounts[index].lastName = req.body.lastName;
-    return res.json({ status: "success", message: "Last name updated" });
+    return res.json({ status: "success", message: `Last name updated to: ${req.body.lastName}` });
 
 })
 
 app.get('/api/account/:name/dob', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index !== -1) {
-        return res.json(`${accounts[index].birthday}`);
+        return res.json({ status: "success", message: `${accounts[index].birthday}` });
     }
-    return res.json({ status: "error", message: "No account with that name" });
+    return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
 })
 
 app.put('/api/account/:name/dob', (req, res) => {
     const index = getAccountIndex(req.params.name);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.params.name}` });
     }
     const validate = validateDate(req.body.birthday);
     if (validate) {
         return res.json({ status: "error", message: validate });
     }
     accounts[index].birthday = req.body.birthday;
-    return res.json({ status: "success", message: "Birthday date updated" });
+    return res.json({ status: "success", message: `Birthday date updated to: ${req.body.birthday}` });
 
 })
 
@@ -157,7 +157,7 @@ app.post('/api/withdrawal', (req, res) => {
 
     const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName)
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.body.firstName} ${req.body.lastName}` });
     }
     if (accounts[index].money < req.body.money) {
         return res.json({ status: "error", message: "Not enough money in the bank account" });
@@ -181,7 +181,7 @@ app.post('/api/deposit', (req, res) => {
 
     const index = getAccountIndex(req.body.firstName + '-' + req.body.lastName);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.body.firstName} ${req.body.lastName}` });
     }
 
     accounts[index].money += req.body.money;
@@ -210,11 +210,11 @@ app.post('/api/transfer', (req, res) => {
 
     const index = getAccountIndex(req.body.firstNameSending + '-' + req.body.lastNameSending);
     if (index === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.body.firstNameSending} ${req.body.lastNameSending}` });
     }
     const index2 = getAccountIndex(req.body.firstNameReceiving + '-' + req.body.lastNameReceiving);
     if (index2 === -1) {
-        return res.json({ status: "error", message: "No account with that name" });
+        return res.json({ status: "error", message: `No account with a name: ${req.body.firstNameReceiving} ${req.body.lastNameReceiving}` });
     }
     if (accounts[index].money < req.body.money) {
         return res.json({ status: "error", message: "Not enough money in the bank account" });
